@@ -218,7 +218,7 @@ class M2m::Item < M2m::Base
       @item_quantities = { :OnHand => nil, :Committed => nil, :InProcess => nil, :Inspection => nil, :OnOrder => nil, :NonNet => nil }
       selects = []
       @item_quantities.keys.each do |key|
-        selects.push "dbo.GetItem#{key}Quantity('#{self.fac.strip}', '#{self.part_number}', '#{self.revision}') as #{key}"
+        selects.push(self.class.sanitize("dbo.GetItem#{key}Quantity('#{self.fac.strip}', '#{self.part_number}', '#{self.revision}') as #{key}"))
       end
       result = self.class.connection.select_one('select ' + selects.join(','))
       # Rails.logger.debug("***************** " + result.inspect)
